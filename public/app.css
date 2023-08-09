@@ -28,20 +28,20 @@ h1{
     font-size: 0.6em;
 }
 .accordion-button.erste{
-    background-color: #FFD018;
+    background-color: #FFCCBB;
     box-shadow: none;
-    border-color: #FFD018;
-    color: #fff;
+    border-color: #FFCCBB;
+    color: #363636;
 }
 .erste:not(.collapsed) {
-    background-color: #FFD018;
+    background-color: #FFCCBB;
     box-shadow: none;
-    border-color: #FFD018;
+    border-color: #FFCCBB;
 }
 .erste:focus:not(:focus-visible){
-    background-color: #FFD018;
+    background-color: #FFCCBB;
     box-shadow: none;
-    border-color: #FFD018;
+    border-color: #FFCCBB;
 }
 .btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
     color: #fff;
@@ -62,59 +62,59 @@ h1{
 }
 
 .accordion-button.zweite{
-    background-color: #F0EB15;
+    background-color: #6EB5C0;
     box-shadow: none;
-    border-color: #F0EB15;
-    color: #363636;
+    border-color: #6EB5C0;
+    color: #fff;
 }
 .zweite:not(.collapsed) {
-    background-color: #F0EB15;
+    background-color: #6EB5C0;
     box-shadow: none;
-    border-color: #F0EB15;
-    color: #363636;
+    border-color: #6EB5C0;
+    color: #fff;
 }
 .zweite:focus:not(:focus-visible){
-    background-color: #F0EB15;
+    background-color: #6EB5C0;
     box-shadow: none;
-    border-color: #F0EB15;
-    color: #363636;
+    border-color: #6EB5C0;
+    color: #fff;
 }
 
 .accordion-button.dritte{
-    background-color: #A1FA1A;
+    background-color: #006C84;
     box-shadow: none;
-    border-color: #A1FA1A;
-    color: #363636;
+    border-color: #006C84;
+    color: #fff;
 }
 .dritte:not(.collapsed) {
-    background-color: #A1FA1A;
+    background-color: #006C84;
     box-shadow: none;
-    border-color: #A1FA1A;
-    color: #363636;
+    border-color: #006C84;
+    color: #fff;
 }
 .dritte:focus:not(:focus-visible){
-    background-color: #A1FA1A;
+    background-color: #006C84;
     box-shadow: none;
-    border-color: #A1FA1A;
-    color: #363636;
+    border-color: #006C84;
+    color: #fff;
 }
 
 .accordion-button.vierte{
-    background-color: #3CD617;
+    background-color: #E2E8E4;
     box-shadow: none;
-    border-color: #3CD617;
-    color: #fff;
+    border-color: #E2E8E4;
+    color: #363636;
 }
 .vierte:not(.collapsed) {
-    background-color: #3CD617;
+    background-color: #E2E8E4;
     box-shadow: none;
-    border-color: #3CD617;
-    color: #fff;
+    border-color: #E2E8E4;
+    color: #363636;
 }
 .vierte:focus:not(:focus-visible){
-    background-color: #3CD617;
+    background-color: #E2E8E4;
     box-shadow: none;
-    border-color: #3CD617;
-    color: #fff;
+    border-color: #E2E8E4;
+    color: #363636;
 }
 
