@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Aacotroneo\Saml2\Events\Saml2LoginEvent;
 
 class SAML2ServiceProvider extends ServiceProvider
 {
@@ -19,7 +25,7 @@ class SAML2ServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Event::listen('Aacotroneo\Saml2\Events\Saml2LoginEvent', function (Saml2LoginEvent $event) {
+        Event::listen('aacotroneo\laravel-saml2\src\Aacotroneo\Saml2\Events\Saml2LoginEvent', function (Saml2LoginEvent $event) {
             $messageId = $event->getSaml2Auth()->getLastMessageId();
             // Add your own code preventing reuse of a $messageId to stop replay attacks
 
