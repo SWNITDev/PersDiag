@@ -1,5 +1,4 @@
 /.phpunit.cache
-/public/build
 /storage/*.key
 /public/storage
 /vendor
