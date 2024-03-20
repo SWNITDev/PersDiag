@@ -17,9 +17,7 @@
       <div class="container">
         <div class="d-flex flex-wrap align-items-between justify-content-between justify-content-lg-between">
           <div>
-            <img src="{{ asset('img/logo_swn.png') }}"
-            <img
-              src="https://www.stadtwerke-neumuenster.de/typo3conf/ext/swn_template/Resources/Public/Assets/img/svg/logo.svg">
+            
           </div>
           <div class="p-4">
             <h1>Perspektivdialog</h1>
