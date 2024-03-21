@@ -17,7 +17,7 @@
       <div class="container">
         <div class="d-flex flex-wrap align-items-between justify-content-between justify-content-lg-between">
           <div>
-            
+            <img src='/public/img/logo_swn.png' width='110px'>
           </div>
           <div class="p-4">
             <h1>Perspektivdialog</h1>
@@ -1406,6 +1406,11 @@
 
 
 <script setup>
+
+
+
+
+
 import { ref } from 'vue';
 
 const showWarning = ref(false);
