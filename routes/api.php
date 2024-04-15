@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\YourController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,12 +32,14 @@ Route::apiResource('questions', QuestionController::class)
     ]);
 });*/
 
- 
+
 Route::prefix('questions')->group(function () {
     Route::get('/question_text/{id}', [QuestionController::class, 'showQuestionText']);
     Route::get('/question_description/{id}', [QuestionController::class, 'showQuestionDescription']);
     Route::get('/question_text_and_description/{id}', [QuestionController::class, 'showQuestionTextAndDescription']);
     Route::get('/question_text_and_description', [QuestionController::class, 'showAllQuestionsTextAndDescription']);
-
+    Route::get('/answer_value', [QuestionController::class, 'saveAnswer']);
+    Route::post('/answer_value', [QuestionController::class, 'saveAnswer']);
 });
+
 
