@@ -83,12 +83,6 @@
                   </div>
                   <hr>
 
-                  <div v-if="selectedOptionGroups[index] !== '0'">
-                    <input type="text" :value="question.id">
-                    <input type="text" :name="'answer_value_' + index" :value="selectedOptionGroups[index]"
-                      v-model="checkedAnswer">
-                  </div>
-
                 </div>
               </div>
 
