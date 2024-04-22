@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\Question;
 use App\Repositories\QuestionRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class QuestionController extends Controller
 {
@@ -57,4 +58,12 @@ class QuestionController extends Controller
         return response()->json(['message' => 'Answer saved successfully', 'data' => $savedAnswer], 200);
 
     }
+
+    public function getQuestionsAndAnswers() {
+        // Вызов метода getQuestionsAndAnswers из репозитория
+        $questionsAndAnswers = $this->questionRepository->getQuestionsAndAnswers();
+        
+        return $questionsAndAnswers;
+    }
+    
 }

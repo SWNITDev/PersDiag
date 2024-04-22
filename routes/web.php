@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\InfoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,11 @@ Route::get('/einladung', function () {
 Route::get('/', function () {
     return view('app');
 });
+Route::get('/info', function () {
+    return view('app');
+});
 Route::get('/user/{userId}/manager', [App\Http\Controllers\MicrosoftGraphController::class, 'showManager']);
 Route::get('/user/{userId}/directReports', [App\Http\Controllers\MicrosoftGraphController::class, 'showReportees']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+

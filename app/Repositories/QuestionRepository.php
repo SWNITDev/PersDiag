@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Carbon\Carbon;
 use App\Models\Answer;
 use App\Models\Question;
+use Illuminate\Support\Facades\DB;
 
 class QuestionRepository
 {
@@ -27,6 +28,7 @@ class QuestionRepository
     public function funcStore($questionId, $answerValue, $workerName)
     {
         $currentDateTime = Carbon::now();
+       // $date = Carbon::create(2023, 1, 1); //für Testfall
 
         // Antwort in der Datenbank speichern
         $savedAnswer = $this->modelAnswer->create([
@@ -34,9 +36,27 @@ class QuestionRepository
             'answer_value' => $answerValue,
             'worker_name' => $workerName,
             'date' => $currentDateTime,
+            //'date' => $date, //für Testfall
         ]);
 
         return $savedAnswer;
 
     }
+
+    public function getQuestionsAndAnswers()
+    {
+        return DB::table('questions')
+            ->join('answers', 'questions.id', '=', 'answers.question_id')
+            ->select(
+                'questions.id as question_id',
+                'questions.question_text',
+                'questions.question_description',
+                'answers.answer_value',
+                'answers.worker_name',
+                DB::raw('YEAR(answers.date) as year')
+            )
+            ->orderBy('question_id', 'asc')
+            ->get();
+    }
 }
+

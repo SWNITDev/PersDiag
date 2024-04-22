@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\YourController;
+use App\Http\Controllers\AnswerController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,5 +41,6 @@ Route::prefix('questions')->group(function () {
     Route::get('/answer_value', [QuestionController::class, 'saveAnswer']);
     Route::post('/answer_value', [QuestionController::class, 'saveAnswer']);
 });
-
+Route::get('/years', [AnswerController::class, 'years']);
+Route::get('/questions_and_answers', [QuestionController::class, 'getQuestionsAndAnswers']);
 

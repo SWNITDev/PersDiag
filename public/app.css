@@ -1,6 +1,9 @@
 h1{
     color:#007684;
 }
+h2{
+    font-size: 1.7rem;
+}
 .btn-swn{
     font-family: 'InfoDisplayWeb',sans-serif;
     font-weight: normal;
@@ -8,7 +11,7 @@ h1{
     display: inline-block;
     padding: 10px 20px;
     text-align: center;
-    margin: 4px auto;
+    margin: 4px;
     text-decoration: none;
     cursor: pointer;
     background-color: #007684;
@@ -32,6 +35,7 @@ h1{
     box-shadow: none;
     border-color: #FFCCBB;
     color: #363636;
+    padding: 35px;
 }
 .erste:not(.collapsed) {
     background-color: #FFCCBB;
@@ -66,6 +70,7 @@ h1{
     box-shadow: none;
     border-color: #6EB5C0;
     color: #fff;
+    padding: 35px;
 }
 .zweite:not(.collapsed) {
     background-color: #6EB5C0;
@@ -85,6 +90,7 @@ h1{
     box-shadow: none;
     border-color: #006C84;
     color: #fff;
+    padding: 35px;
 }
 .dritte:not(.collapsed) {
     background-color: #006C84;
@@ -104,6 +110,7 @@ h1{
     box-shadow: none;
     border-color: #E2E8E4;
     color: #363636;
+    padding: 35px;
 }
 .vierte:not(.collapsed) {
     background-color: #E2E8E4;
@@ -117,4 +124,12 @@ h1{
     border-color: #E2E8E4;
     color: #363636;
 }
-
+.nav{
+    padding-top: 30px;
+}
+.space{
+    margin-top: 4em;
+}
+.info{
+    text-align: center;
+}
