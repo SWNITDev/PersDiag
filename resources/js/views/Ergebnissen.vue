@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col">
           <div class="nav">
-            <h2 class="info">Meine Bewertungen</h2>
+            <h2 class="info">Meine Ergebnissen</h2>
           </div>
           <div class="space"></div>
           <div class="col-md-4">
@@ -21,20 +21,20 @@
                 <tr>
                   <th scope="col">Nr</th>
                   <th scope="col">Frage</th>
-                  <th scope="col">Frage Beschreibung</th>
-                  <th scope="col">Antwort</th>
-                  <th scope="col">Arbeiter testSpalte</th>
-                  <th scope="col">Jahr testSpalte</th>
+                  <th scope="col">Antwort Mitarbeiter</th>
+                  <th scope="col">Antwort Vorgesetzter</th>
+                  <th scope="col">Massnahme</th>
+                  <th scope="col">Erfühlen bis</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in filteredQuestionsAndAnswers" :key="index">
+                <tr v-for="(item, index) in filteredAnswersAndActions" :key="index">
                   <th scope="row">{{ item.question_id }}</th>
                   <td>{{ item.question_text }}</td>
-                  <td>{{ item.question_description }}</td>
                   <td>{{ item.answer_value }}</td>
-                  <td>{{ item.worker_name }}</td>
-                  <td>{{ item.year }}</td>
+                  <td>Antwort Vorgesetzter</td>
+                  <td>{{ item.action_text }}</td>
+                  <td>{{ item.execute_date }}</td>
                 </tr>
               </tbody>
             </table>
@@ -57,32 +57,32 @@ export default {
     return {
       years: [],
       selectedYear: '',
-      questionsAndAnswers: []
+      AnswersAndActions: []
     };
   },
   mounted() {
-    this.fetchQuestionsAndAnswers();
+    this.fetchAnswersAndActions();
   },
   computed: {
-    filteredQuestionsAndAnswers() {
+    filteredAnswersAndActions() {
       if (!this.selectedYear) {
         return [];
       } else {
-        return this.questionsAndAnswers.filter(item => {
+        return this.AnswersAndActions.filter(item => {
           return item.year === parseInt(this.selectedYear);
         });
       }
     }
   },
   methods: {
-    async fetchQuestionsAndAnswers() {
+    async fetchAnswersAndActions() {
       try {
-        const response = await axios.get('/api/questions_and_answers');
-        this.questionsAndAnswers = response.data;
+        const response = await axios.get('/api/answers_and_actions');
+        this.AnswersAndActions = response.data;
         // JahrWert bekommen
-        this.years = [...new Set(this.questionsAndAnswers.map(item => item.year))];
+        this.years = [...new Set(this.AnswersAndActions.map(item => item.year))];
       } catch (error) {
-        console.error('Error fetching questions and answers:', error);
+        console.error('Error fetching actions and answers:', error);
       }
     }
   }

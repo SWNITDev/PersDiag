@@ -6,6 +6,7 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@vuepic/vue-datepicker": "^8.5.0",
         "@popperjs/core": "^2.11.6",
         "@vitejs/plugin-vue": "^4.2.3",
         "axios": "^1.1.2",
@@ -20,5 +21,6 @@
         "vue-loader": "^17.0.1",
         "sweetalert2":"^11.10.7",
         "vue-router": "^4.0.0"
+        
     }
 }

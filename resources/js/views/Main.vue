@@ -1,17 +1,18 @@
 <template>
   <HeaderLayout>
-    <!-- Hier kommt der Hauptinhalt Ihrer Seite -->
   </HeaderLayout>
-<div>
+  <div>
     <div class="container-fluid flex-shrink-0">
       <div class="container">
-        <h3 class="p-3"> Liebe Mitarbeiterinnen und Mitarbeiter,</h3>
+        <div class="space"></div>
+        <h3> Liebe Mitarbeiterinnen und Mitarbeiter,</h3>
         <p>Wir freuen uns, dass Sie an unserer Umfrage teilnehmen! Ihre Meinung und Ihre Erfahrungen sind uns äußerst
           wichtig,
           da sie uns dabei helfen, unser Unternehmen kontinuierlich zu verbessern und Ihnen ein besseres Arbeitsumfeld
           zu
           bieten. Ihre Teilnahme ist entscheidend, und wir schätzen Ihre Zeit und Mühe.</p>
-        <p class="p-3">Herzlichen Dank und beste Grüße</p>
+        <p>Herzlichen Dank und beste Grüße</p>
+        <div class="space"></div>
       </div>
       <div class="container">
         <div class="accordion" id="accordionExample">
@@ -22,7 +23,8 @@
                 <i class="bi-alarm" style="font-size: 2rem; color: cornflowerblue;"></i> Fach- und Medienkompetenzen
               </button>
             </h2>
-            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample">
               <div class="accordion-body">
                 <div class="row" v-for="(question, index) in questions.slice(0, 6)" :key="index">
                   <div class="col-2">
@@ -211,7 +213,7 @@
     <div class="d-grid gap-2 p-5 d-md-flex justify-content-md-center">
       <button class="btn btn-swn btn-lg" type="button" @click="checkSelection">Senden</button>
     </div>
-</div>
+  </div>
 
 </template>
 
@@ -275,6 +277,7 @@ function sendAnswers() {
       // Wenn alle Antworten erfolgreich gespeichert wurden, zeige eine Erfolgsmeldung an
       Swal.fire({
         title: "Gesendet",
+        confirmButtonColor: "#007684",
         text: "Danke für Teilnehmen",
         icon: "success"
       });
@@ -299,6 +302,7 @@ function checkSelection() {
       hasUnselected = true;
       Swal.fire({
         icon: "error",
+        confirmButtonColor: "#007684",
         title: "Nicht alle Fragen sind beantwortet.",
         text: "Überprüfen Sie bitte Ihre Bewertung."
       });
@@ -311,9 +315,9 @@ function checkSelection() {
     Swal.fire({
       title: "Möchten Sie Bewertung abschicken?",
       text: " ",
-      icon: "warning",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#007684",
       cancelButtonColor: "#d33",
       cancelButtonText: "Abbrechen",
       confirmButtonText: "Ja, senden"
@@ -337,6 +341,5 @@ export default {
 </script>
 
 <style>
-/* Импорт файла app.css */
 @import '../../../public/app.css';
 </style>

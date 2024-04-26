@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Answer extends Model
+class Action extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['answer_value', 'question_id', 'worker_name', 'activ_name', 'date'];
-
+    protected $fillable = ['action_text', 'execute_date', 'date', 'question_id', 'worker_name'];
+    
     public function question()
     {
         return $this->belongsTo(Question::class);
     }
     public $timestamps = false;
-
 
 }

@@ -22,6 +22,19 @@ Route::get('/', function () {
 Route::get('/info', function () {
     return view('app');
 });
+Route::get('/mainWorker', function () {
+    return view('app');
+});
+Route::get('/gespraech', function () {
+    return view('app');
+});
+Route::get('/ergebnisse', function () {
+    return view('app');
+});
+Route::get('/ergebnisse_mitarbeiter', function () {
+    return view('app');
+});
+
 Route::get('/user/{userId}/manager', [App\Http\Controllers\MicrosoftGraphController::class, 'showManager']);
 Route::get('/user/{userId}/directReports', [App\Http\Controllers\MicrosoftGraphController::class, 'showReportees']);
 

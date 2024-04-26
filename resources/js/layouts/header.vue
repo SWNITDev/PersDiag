@@ -1,11 +1,18 @@
 <template>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PerspektivDialog</title>
+  </head>
   <div class="header">
-    <!-- Header -->
     <header class="mb-3 border-bottom">
       <div class="container">
         <div class="d-flex flex-wrap align-items-between justify-content-between justify-content-lg-between">
           <div>
-            <img src="https://www.stadtwerke-neumuenster.de/typo3conf/ext/swn_template/Resources/Public/Assets/img/svg/logo.svg" width="110" alt="Logo">
+            <img
+              src="https://www.stadtwerke-neumuenster.de/typo3conf/ext/swn_template/Resources/Public/Assets/img/svg/logo.svg"
+              width="110" alt="Logo">
           </div>
           <div class="p-4">
             <h1>Perspektivdialog</h1>

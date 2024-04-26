@@ -41,6 +41,8 @@ Route::prefix('questions')->group(function () {
     Route::get('/answer_value', [QuestionController::class, 'saveAnswer']);
     Route::post('/answer_value', [QuestionController::class, 'saveAnswer']);
 });
-Route::get('/years', [AnswerController::class, 'years']);
 Route::get('/questions_and_answers', [QuestionController::class, 'getQuestionsAndAnswers']);
+Route::post('/actions', [QuestionController::class, 'saveAction']);
+Route::get('/actions', [QuestionController::class, 'saveAction']);
+Route::get('/answers_and_actions', [QuestionController::class, 'getAnswersAndActions']);
 
