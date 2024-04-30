@@ -18,6 +18,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        //NEWNEWNEW
+        //Hier wird ein neues listen Event definiert, welches unseren SSO Login auslöst
+        //NEWNEWNEW
+        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+            \SocialiteProviders\Azure\AzureExtendSocialite::class.'@handle',
+        ],
     ];
 
     /**

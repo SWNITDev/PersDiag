@@ -42,6 +42,9 @@ class MicrosoftGraphController extends Controller
     {
         $manager = $this->graphService->users()->byUserId($userId)->manager()->get()->wait();
 
+        //NEWNEWNEW
+        // Hier kann der Rückgabewert für den Manager angepasst werden. Siehe: https://learn.microsoft.com/de-de/graph/api/orgcontact-get-manager?view=graph-rest-1.0&tabs=php
+        //NEWNEWNEW
         if ($manager) {
             return response()->json([
             'manager' => $manager->getDisplayName(),
@@ -54,6 +57,7 @@ class MicrosoftGraphController extends Controller
 
     public function showReportees($userId)
     {
+        
         $result = $this->graphService->users()->byUserId($userId)->directReports()->get()->wait();
         
         $items = [];
@@ -63,6 +67,9 @@ class MicrosoftGraphController extends Controller
         if ($result){
             $pageIterator->setHeaders(['Content-Type' => 'application/json']);
             $pageIterator->iterate(function ($result) use (&$items) {
+                //NEWNEWNEW
+                //Hier kann der Rückgabewert für alle Mitarbeitenden unter einem Manager angepasst werden. Siehe: https://learn.microsoft.com/de-de/graph/api/user-list-directreports?view=graph-rest-1.0&tabs=http
+                //NEWNEWNEW
                 $items []= $result->getMail().PHP_EOL;
                 return true;
             });
