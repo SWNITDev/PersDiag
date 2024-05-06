@@ -18,7 +18,7 @@
             <h1>Perspektivdialog</h1>
           </div>
           <div class="p-4">
-            <button type="button" class="btn btn-swn">Sign-up</button>
+            <button type="button" @click="azureLogin" class="btn btn-swn">Sign in</button>
             <button v-if="isHome" @click="goToInfo" class="btn btn-swn">Info</button>
             <button v-else @click="goHome" class="btn btn-swn">Home</button>
           </div>
@@ -78,6 +78,10 @@ const goToMainWorker = () => {
 
 const goHome = () => {
   router.push('/')
+}
+
+const azureLogin = () => {
+  router.push('login/azure')
 }
 
 const goToGespraech = () => {

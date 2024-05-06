@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Perspektiv Dialog'),
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +168,12 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        //NEWNEWNEW
+        //Hier werden die Provider von Socialite für den SSO Login importiert
+        //NEWNEWNEW
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        SocialiteProviders\Manager\ServiceProvider::class,
+        
     ])->toArray(),
 
     /*
