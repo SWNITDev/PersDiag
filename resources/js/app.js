@@ -7,6 +7,7 @@ import MainWorker from './views/MainWorker.vue';
 import Gespraech from './views/Gespraech.vue';
 import Ergebnissen from './views/Ergebnissen.vue';
 import ErgebnissenWorker from './views/ErgebnissenWorker.vue';
+import Admin from './views/Admin.vue';
 
 const routes = [
   { path: '/', component: Main },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/gespraech', component: Gespraech },
   { path: '/ergebnisse', component: Ergebnissen },
   { path: '/ergebnisse_mitarbeiter', component: ErgebnissenWorker },
+  { path: '/admin', component: Admin },
 ];
 
 const router = createRouter({

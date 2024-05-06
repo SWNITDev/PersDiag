@@ -30,19 +30,19 @@ h2{
     padding: 40;
     font-size: 0.6em;
 }
-.accordion-button.erste{
+.btn-color-0{
     background-color: #FFCCBB;
     box-shadow: none;
     border-color: #FFCCBB;
     color: #363636;
     padding: 35px;
 }
-.erste:not(.collapsed) {
+.btn-color-0:not(.collapsed) {
     background-color: #FFCCBB;
     box-shadow: none;
     border-color: #FFCCBB;
 }
-.erste:focus:not(:focus-visible){
+.btn-color-0:focus:not(:focus-visible){
     background-color: #FFCCBB;
     box-shadow: none;
     border-color: #FFCCBB;
@@ -65,60 +65,60 @@ h2{
     color: #007684;
 }
 
-.accordion-button.zweite{
+.btn-color-1{
     background-color: #6EB5C0;
     box-shadow: none;
     border-color: #6EB5C0;
     color: #fff;
     padding: 35px;
 }
-.zweite:not(.collapsed) {
+.btn-color-1:not(.collapsed) {
     background-color: #6EB5C0;
     box-shadow: none;
     border-color: #6EB5C0;
     color: #fff;
 }
-.zweite:focus:not(:focus-visible){
+.btn-color-1:focus:not(:focus-visible){
     background-color: #6EB5C0;
     box-shadow: none;
     border-color: #6EB5C0;
     color: #fff;
 }
 
-.accordion-button.dritte{
+.btn-color-2{
     background-color: #006C84;
     box-shadow: none;
     border-color: #006C84;
     color: #fff;
     padding: 35px;
 }
-.dritte:not(.collapsed) {
+.btn-color-2:not(.collapsed) {
     background-color: #006C84;
     box-shadow: none;
     border-color: #006C84;
     color: #fff;
 }
-.dritte:focus:not(:focus-visible){
+.btn-color-2:focus:not(:focus-visible){
     background-color: #006C84;
     box-shadow: none;
     border-color: #006C84;
     color: #fff;
 }
 
-.accordion-button.vierte{
+.btn-color-3{
     background-color: #E2E8E4;
     box-shadow: none;
     border-color: #E2E8E4;
     color: #363636;
     padding: 35px;
 }
-.vierte:not(.collapsed) {
+.btn-color-3:not(.collapsed) {
     background-color: #E2E8E4;
     box-shadow: none;
     border-color: #E2E8E4;
     color: #363636;
 }
-.vierte:focus:not(:focus-visible){
+.btn-color-3:focus:not(:focus-visible){
     background-color: #E2E8E4;
     box-shadow: none;
     border-color: #E2E8E4;

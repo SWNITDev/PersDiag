@@ -42,7 +42,7 @@ class QuestionController extends Controller
 
     public function showAllQuestionsTextAndDescription()
     {
-        $questions = Question::all(['question_text', 'question_description', 'id']);
+        $questions = Question::all(['question_text', 'question_description', 'question_kategory', 'id']);
         return response()->json($questions);
     }
 
@@ -99,6 +99,54 @@ class QuestionController extends Controller
         
         return $answersAndActions;
         }
+
+        public function store(Request $request)
+    {
+        // Validate the request
+        $validatedData = $request->validate([
+            'question_text' => 'required',
+            'question_description' => 'required',
+        ]);
+
+        // Create a new question
+        $question = Question::create($validatedData);
+
+        return response()->json(['message' => 'Question created successfully', 'question' => $question], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Find the question by ID
+        $question = Question::find($id);
+        if (!$question) {
+            return response()->json(['message' => 'Question not found'], 404);
+        }
+
+        // Validate the request
+        $validatedData = $request->validate([
+            'question_text' => 'required',
+            'question_description' => 'required',
+        ]);
+
+        // Update the question
+        $question->update($validatedData);
+
+        return response()->json(['message' => 'Question updated successfully', 'question' => $question]);
+    }
+
+    public function destroy($id)
+    {
+        // Find the question by ID
+        $question = Question::find($id);
+        if (!$question) {
+            return response()->json(['message' => 'Question not found'], 404);
+        }
+
+        // Delete the question
+        $question->delete();
+
+        return response()->json(['message' => 'Question deleted successfully']);
+    }
 
     }
 

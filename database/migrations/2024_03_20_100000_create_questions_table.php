@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('question_text');
             $table->text('question_description');
+            $table->text('question_kategory');
         });
     }
 

@@ -34,6 +34,9 @@ Route::get('/ergebnisse', function () {
 Route::get('/ergebnisse_mitarbeiter', function () {
     return view('app');
 });
+Route::get('/admin', function () {
+    return view('app');
+});
 
 Route::get('/user/{userId}/manager', [App\Http\Controllers\MicrosoftGraphController::class, 'showManager']);
 Route::get('/user/{userId}/directReports', [App\Http\Controllers\MicrosoftGraphController::class, 'showReportees']);

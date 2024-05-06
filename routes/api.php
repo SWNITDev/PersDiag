@@ -38,6 +38,11 @@ Route::prefix('questions')->group(function () {
     Route::get('/question_description/{id}', [QuestionController::class, 'showQuestionDescription']);
     Route::get('/question_text_and_description/{id}', [QuestionController::class, 'showQuestionTextAndDescription']);
     Route::get('/question_text_and_description', [QuestionController::class, 'showAllQuestionsTextAndDescription']);
+
+    Route::post('/', [QuestionController::class, 'store']);
+    Route::put('/{id}', [QuestionController::class, 'update']);
+    Route::delete('/{id}', [QuestionController::class, 'destroy']);
+
     Route::get('/answer_value', [QuestionController::class, 'saveAnswer']);
     Route::post('/answer_value', [QuestionController::class, 'saveAnswer']);
 });
