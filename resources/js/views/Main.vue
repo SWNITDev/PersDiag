@@ -107,6 +107,7 @@ const goToAbout = () => {
   router.push('/info');
 };
 
+const activeName = ref('');
 const questions = ref([]);
 const selectedOptionGroups = ref([]);
 const groupedQuestions = ref([]);
@@ -126,10 +127,14 @@ function sendAnswersToServer() {
       // Получение идентификатора вопроса и значения ответа
       const questionId = question.id;
 
-      console.log(`Данные перед отправкой на сервер: questionId=${questionId}, answerValue=${selectedValue}`);
+      console.log(`Данные перед отправкой на сервер: questionId=${questionId}, answerValue=${selectedValue}, aktiv_name=${activeName.value.aktiveName}`);
       
       // Добавление запроса в массив запросов
-      const request = axios.post('/api/questions/answer_value', { question_id: questionId, answer_value: selectedValue });
+      const request = axios.post('/api/questions/answer_value', { 
+        question_id: questionId, 
+        answer_value: selectedValue,
+        aktiv_name: activeName.value.aktiveName
+      });
       requests.push(request);
       console.log("Добавлен запрос:", request);
     }
@@ -229,6 +234,15 @@ const fetchQuestions = () => {
 
 onMounted(() => {
   fetchQuestions();
+
+  axios.get('/login/azure')
+    .then(response => {
+      console.log('Received active name:', response.data.aktiveName);
+      activeName.value = response.data.aktiveName; // Устанавливаем значение activeName из ответа сервера
+    })
+    .catch(error => {
+      console.error('Error fetching active name:', error.response.data);
+    });
 });
 </script>
 

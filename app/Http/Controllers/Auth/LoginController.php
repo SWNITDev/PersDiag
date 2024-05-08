@@ -54,9 +54,10 @@ class LoginController extends Controller
             //Hier wird das User-Objekt zurückgegeben. Hier muss noch an dem Return gearbeitet werden, so dass man wieder auf der Home-Seite landet.
             //NEWNEWNEW
             $user = Socialite::driver('azure')->stateless()->user();
-
+            
             return response()->json([
                 'id' => $user->getId(),
+                'aktiveName' => $user->getName(),
                 ]);
 
             //NEWNEWNEW

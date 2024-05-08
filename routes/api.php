@@ -36,7 +36,6 @@ Route::apiResource('questions', QuestionController::class)
 Route::prefix('questions')->group(function () {
     Route::get('/question_text/{id}', [QuestionController::class, 'showQuestionText']);
     Route::get('/question_description/{id}', [QuestionController::class, 'showQuestionDescription']);
-    Route::get('/question_text_and_description/{id}', [QuestionController::class, 'showQuestionTextAndDescription']);
     Route::get('/question_text_and_description', [QuestionController::class, 'showAllQuestionsTextAndDescription']);
 
     Route::post('/', [QuestionController::class, 'store']);

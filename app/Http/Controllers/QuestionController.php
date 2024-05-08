@@ -51,7 +51,7 @@ class QuestionController extends Controller
     $questionId = $request->input('question_id');
     $answerValue = $request->input('answer_value');
     $workerName = $request->input('worker_name'); 
-    $activName = 'activname'; // Standardwert für den Namen des Mitarbeiters setzen
+    $activName = $request->input('aktiv_name');
     
     // Wenn $workerName nicht übergeben wurde, wird $activName als Standardwert verwendet.
     if (!$workerName) {
@@ -106,6 +106,7 @@ class QuestionController extends Controller
         $validatedData = $request->validate([
             'question_text' => 'required',
             'question_description' => 'required',
+            'question_kategory' => 'required',
         ]);
 
         // Create a new question
