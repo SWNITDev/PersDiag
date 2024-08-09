@@ -235,14 +235,14 @@ const fetchQuestions = () => {
 onMounted(() => {
   fetchQuestions();
 
-  axios.get('/login/azure')
-    .then(response => {
-      console.log('Received active name:', response.data.aktiveName);
-      activeName.value = response.data.aktiveName; // Устанавливаем значение activeName из ответа сервера
-    })
-    .catch(error => {
-      console.error('Error fetching active name:', error.response.data);
-    });
+  //axios.get('/login/azure')
+  //  .then(response => {
+  //    console.log('Received active name:', response.data.aktiveName);
+  //    activeName.value = response.data.aktiveName; // Устанавливаем значение activeName из ответа сервера
+  //  })
+  //  .catch(error => {
+  //    console.error('Error fetching active name:', error.response.data);
+  //  });
 });
 </script>
 

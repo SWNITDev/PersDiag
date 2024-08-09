@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Socialite;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -40,37 +41,34 @@ class LoginController extends Controller
     }
 
     public function redirectToProvider()
-    {
-        //NEWNEWNEW
-        //Hier wird die SSO Login Seite aufgerufen. Bug: Seite lädt erst nach einmal Neuladen (F5)
-        //NEWNEWNEW
-        return Socialite::driver('azure')->stateless()->redirect();
+{
+    if (!Session::isStarted()) {
+        Session::start();
     }
+    return Socialite::driver('azure')->stateless()->redirect();
+}
 
-    public function handleProviderCallback()
-    {
-        try {
-            //NEWNEWNEW
-            //Hier wird das User-Objekt zurückgegeben. Hier muss noch an dem Return gearbeitet werden, so dass man wieder auf der Home-Seite landet.
-            //NEWNEWNEW
-            $user = Socialite::driver('azure')->stateless()->user();
-            
-            return response()->json([
-                'id' => $user->getId(),
-                'aktiveName' => $user->getName(),
-                ]);
-
-            //NEWNEWNEW
-            //So kommt man auf die Startseite zurück
-            //NEWNEWNEW
-            
-            //return redirect('/');
-            
-        } catch (\Exception $e) {
-            //NEWNEWNEW
-            //Fehlerbehandlung. Ist noch nicht schön, aber wirft den Fehler...
-            //NEWNEWNEW
-            return $e;
+public function handleProviderCallback()
+{
+    try {
+        if (!Session::isStarted()) {
+            Session::start();
         }
+        
+        $user = Socialite::driver('azure')->stateless()->user();
+
+        Session::put('user', [
+            'userName' => $user->getName(),
+            'userId' => $user->getId(),
+        ]);
+
+        \Log::info('User stored in session: ', Session::get('user'));
+
+        return redirect('/');
+        //return $user()->json([]);
+    } catch (\Exception $e) {
+        \Log::error('Error in handleProviderCallback: ', ['exception' => $e]);
+        return $e;
     }
+}
 }

@@ -35,6 +35,9 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+            
+            //Route::middleware('cors')
+            //    ->group(base_path('app/Http/Middleware/Cors.php'));
         });
     }
 }

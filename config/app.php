@@ -173,6 +173,7 @@ return [
         //NEWNEWNEW
         Laravel\Socialite\SocialiteServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
+        Illuminate\Session\SessionServiceProvider::class,
         
     ])->toArray(),
 

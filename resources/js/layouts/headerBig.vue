@@ -30,7 +30,7 @@
     <div class="row">
       <div class="col-2">
         <div class="space"></div>
-        <p>Hallo WorkerName!</p>
+        <p>Hallo {{ userName }}!</p>
         <div class="list-group">
           <button type="button" @click="goToInfo" class="list-group-item list-group-item-action">Meine
             Bewertungen</button>
@@ -60,6 +60,8 @@
 </template>
 
 <script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -93,6 +95,24 @@ const goToErgebnissen = () => {
 const goToErgebnisseMitarbeiter = () => {
   router.push('/ergebnisse_mitarbeiter')
 }
+
+// Fetch userName
+const userName = ref('');  // Ref to hold userName
+
+const fetchUserName = async () => {
+  try {
+    const response = await axios.get('/user/manager');
+    userName.value = response.data.userName;
+  } catch (error) {
+    console.error('Error fetching userName:', error);
+  }
+}
+
+// Fetch the userName when the component is mounted
+onMounted(() => {
+  fetchUserName();
+});
+
 
 </script>
 

@@ -16,5 +16,7 @@ class Cors extends Middleware
         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With');
 
         return $response;
+        //return $next($request)->header('Access-Control-Allow-Origin', '*')
+        //->header('Access-Control-Allow-Methods','GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS');
     }
 }

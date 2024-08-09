@@ -21,6 +21,8 @@ use Microsoft\Graph\Http\GraphRequestOptions;
 use Microsoft\Graph\Authentication\Provider\MultiTenantAuthProvider;
 use Microsoft\Graph\Core\Tasks\PageIterator;
 use DateTimeInterface;
+//NEW2
+use Illuminate\Support\Facades\Session;
 
 
 class MicrosoftGraphController extends Controller
@@ -38,26 +40,57 @@ class MicrosoftGraphController extends Controller
         $this->graphService = new GraphServiceClient($clientCredentialProvider);
     }
 
-    public function showManager($userId)
+    public function showManager()
     {
+        // Sicherstellen, dass die Session gestartet ist
+        if (!Session::isStarted()) {
+            Session::start();
+        }
+
+        // Debugging: Überprüfen, ob die Session-Daten vorhanden sind
+        \Log::info('Session Data: ', Session::all());
+
+        // Zugriff auf die Session-Daten direkt über die Session-Facade
+        $userId = Session::get('user.userId');
+        $user = Session::get('user');
+
+        // Debugging: Überprüfen, ob die userId vorhanden ist
+        \Log::info('User ID in session: ', ['userId' => $userId]);
+
+        // Prüfen, ob userId gesetzt ist
+        if (!$userId) {
+            return response()->json(['error' => 'User ID not found in session'], 404);
+        }
+
         $manager = $this->graphService->users()->byUserId($userId)->manager()->get()->wait();
 
-        //NEWNEWNEW
-        // Hier kann der Rückgabewert für den Manager angepasst werden. Siehe: https://learn.microsoft.com/de-de/graph/api/orgcontact-get-manager?view=graph-rest-1.0&tabs=php
-        //NEWNEWNEW
         if ($manager) {
+            // Manager-Daten in die Session speichern
+            Session::put('manager', [
+                'managerName' => $manager->getDisplayName(),
+                'managerMail' => $manager->getMail(),
+            ]);
+
             return response()->json([
-            'manager' => $manager->getDisplayName(),
-            'email' => $manager->getMail(),
+                'userName' => Session::get('user.userName'),
+                //'userMail' => Session::get('user.userMail'),
+                'managerName' => $manager->getDisplayName(),
+                'managerMail' => $manager->getMail(),
             ]);
         } else {
             return response()->json(['error' => 'Manager not found'], 404);
         }
     }
 
+
     public function showReportees($userId)
     {
+        if (!Session::isStarted()) {
+            Session::start();
+        }
         
+
+
         $result = $this->graphService->users()->byUserId($userId)->directReports()->get()->wait();
         
         $items = [];
@@ -73,6 +106,11 @@ class MicrosoftGraphController extends Controller
                 $items []= $result->getMail().PHP_EOL;
                 return true;
             });
+
+            //NEW2
+            Session::put('reportees', $items);
+            //NEW2
+
             return $items;
         } else {
             return response()->json(['error' => 'Reporter not found'], 404);
