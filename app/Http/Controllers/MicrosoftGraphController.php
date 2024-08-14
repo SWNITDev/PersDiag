@@ -83,37 +83,40 @@ class MicrosoftGraphController extends Controller
     }
 
 
-    public function showReportees($userId)
-    {
-        if (!Session::isStarted()) {
-            Session::start();
-        }
-        
-
-
-        $result = $this->graphService->users()->byUserId($userId)->directReports()->get()->wait();
-        
-        $items = [];
-        
-        $pageIterator = new PageIterator($result, $this->graphService->getRequestAdapter());
-        
-        if ($result){
-            $pageIterator->setHeaders(['Content-Type' => 'application/json']);
-            $pageIterator->iterate(function ($result) use (&$items) {
-                //NEWNEWNEW
-                //Hier kann der Rückgabewert für alle Mitarbeitenden unter einem Manager angepasst werden. Siehe: https://learn.microsoft.com/de-de/graph/api/user-list-directreports?view=graph-rest-1.0&tabs=http
-                //NEWNEWNEW
-                $items []= $result->getMail().PHP_EOL;
-                return true;
-            });
-
-            //NEW2
-            Session::put('reportees', $items);
-            //NEW2
-
-            return $items;
-        } else {
-            return response()->json(['error' => 'Reporter not found'], 404);
-        }
+    public function showReportees()
+{
+    if (!Session::isStarted()) {
+        Session::start();
     }
+    
+    // Zugriff auf die Session-Daten direkt über die Session-Facade
+    $userId = Session::get('user.userId');
+
+    $result = $this->graphService->users()->byUserId($userId)->directReports()->get()->wait();
+    
+    $items = [];
+    
+    $pageIterator = new PageIterator($result, $this->graphService->getRequestAdapter());
+    
+    if ($result) {
+        $pageIterator->setHeaders(['Content-Type' => 'application/json']);
+        $pageIterator->iterate(function ($result) use (&$items) {
+            // Сохранение DisplayName в массив
+            $items[] = $result->getDisplayName();
+            return true;
+        });
+
+        // Преобразование массива в JSON строку
+        $itemsJson = json_encode($items);
+
+        // Сохранение JSON строки в сессии
+        Session::put('reportees', $itemsJson);
+
+        // Возвращаем JSON вместо обычного массива
+        return response()->json($items);
+    } else {
+        return response()->json(['error' => 'Reporter not found'], 404);
+    }
+}
+
 }

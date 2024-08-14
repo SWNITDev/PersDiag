@@ -50,10 +50,10 @@
                   {{ item.question_text }}
                 </div>
                 <div class="col">
-                  {{ item.answer_value }}
+                  {{ item.answer_value_worker }}
                 </div>
                 <div class="col">
-                  nicht relevant
+                  {{ item.answer_value_manager }}
                 </div>
                 <div class="col-4">
                   <textarea class="form-control" :id="'Textarea-' + index" rows="3"
@@ -69,6 +69,7 @@
             </div>
             <div class="d-grid gap-2 p-5 d-md-flex justify-content-md-center">
               <button class="btn btn-swn btn-lg" type="button" @click="sendActions">Speichern</button>
+              <button class="btn btn-swn btn-lg" type="button" @click="filteredQuestionsAndAnswers">filter</button>
             </div>
           </div>
         </div>
@@ -77,103 +78,164 @@
   </HeaderLayout>
 </template>
 
-<script>
-import HeaderLayout from '@/layouts/headerBig.vue';
+<script setup>
+import { watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
 import Swal from 'sweetalert2';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import HeaderLayout from '@/layouts/headerBig.vue';
 
-export default {
+// State variables
+const date = ref(null);
+const activeName = ref('');
+const workers = ref([]);
+const selectedWorker = ref('');
+const questionsAndAnswers = ref([]);
+const actionText = ref([]);
+const executeDate = ref([]);
 
-  components: {
-    HeaderLayout,
-    VueDatePicker,
-  },
-  data() {
-    return {
-      date: null,
-      workers: [],
-      selectedWorker: '',
-      questionsAndAnswers: [],
-      actionText: [],
-      executeDate: [],
-    };
-  },
-  mounted() {
-    this.fetchQuestionsAndAnswers();
-  },
-  computed: {
-    filteredQuestionsAndAnswers() {
-      if (!this.selectedWorker) return [];
-      return this.questionsAndAnswers.filter(item => item.worker_name === this.selectedWorker);
-    },
-  },
-  methods: {
-    async fetchQuestionsAndAnswers() {
-      try {
-        const response = await axios.get('/api/questions_and_answers');
-        this.questionsAndAnswers = response.data;
-        // WorkerWert bekommen
-        this.workers = [...new Set(this.questionsAndAnswers.map(item => item.worker_name))];
-      } catch (error) {
-        console.error('Error fetching questions and answers:', error);
-      }
-    },
 
-    sendActions() {
-      // Abfrage-Array
-      const requests = [];
 
-      // Jede Action einzeln durchgehen und senden
-      this.actionText.forEach((actionText, index) => {
-        const questionId = this.filteredQuestionsAndAnswers[index].question_id;
-        const workerName = this.selectedWorker;
-        const executeDate = this.executeDate[index].toISOString();
+const fetchUserName = async () => {
+  try {
+    const response = await axios.get('/user/manager');
+    activeName.value = response.data.userName;
+    console.log('Active Name fetched:', activeName.value); 
+  } catch (error) {
+    console.error('Error fetching activeName:', error);
+  }
+};
 
-        const request = axios.post('/api/actions', {
-          question_id: questionId,
-          action_text: actionText,
-          worker_name: workerName,
-          execute_date: executeDate
-        });
-        request.then(response => {
-          console.log('Aktion erfolgreich gesendet:', response.data);
+const fetchWorkers = () => {
+  axios.get('/user/reporters')
+    .then(response => {
+      workers.value = response.data; // Предполагается, что сервер возвращает массив работников
+      console.log('Fetched workers:', workers.value);
+    })
+    .catch(error => {
+      console.error('Error fetching workers:', error.response.data);
+    });
+};
 
-        })
-          .catch(error => {
-            console.error('Fehler beim Senden der Aktion:', error.response.data);
-          });
+// Computed property to filter questions by selected worker 
+const filteredQuestionsAndAnswers = computed(() => {
+  if (!selectedWorker.value || !activeName.value) {
+    console.log("No worker or active name selected");
+    return [];
+  }
 
-        // Hinzufügen einer Abfrage zum Abfrage-Array
-        requests.push(request);
+  const currentYear = new Date().getFullYear();
+
+  return questionsAndAnswers.value
+    .filter(item => {
+      const itemYear = new Date(item.date).getFullYear();
+      console.log(`Item date: ${item.date}, Year: ${itemYear}, Is current year: ${itemYear === currentYear}`);
+      return itemYear === currentYear;
+    })
+    .map(item => {
+      const answer_value_worker = (item.worker_name === selectedWorker.value && item.activ_name === selectedWorker.value) 
+        ? item.answer_value 
+        : '';
+
+      const answer_value_manager = (item.worker_name === selectedWorker.value && item.activ_name === activeName.value) 
+        ? item.answer_value 
+        : '';
+
+      console.log(`Item: ${item.question_id}, Worker: ${item.worker_name}, Activ: ${item.activ_name}`);
+      console.log('Assigned values:', {
+        answer_value_worker: answer_value_worker,
+        answer_value_manager: answer_value_manager,
       });
 
-      // Warten, bis alle Anfragen erfüllt sind
-      Promise.all(requests)
-        .then(() => {
+      return {
+        ...item,
+        answer_value_worker,
+        answer_value_manager,
+      };
+    });
+});
 
-          Swal.fire({
-            title: "Gesendet",
-            confirmButtonColor: "#007684",
-            text: "Danke für Teilnehmen",
-            icon: "success"
-          });
-        })
-        .catch(error => {
 
-          console.error('Fehler beim Speichern der Aktionen:', error);
-          Swal.fire({
-            icon: "error",
-            confirmButtonColor: "#007684",
-            title: "Fehler beim Speichern der Aktionen.",
-            text: "Bitte versuchen Sie es später erneut."
-          });
-        });
-    }
+
+// Fetch questions and answers
+const fetchQuestionsAndAnswers = async () => {
+  try {
+    const response = await axios.get('/api/questions_and_answers');
+    questionsAndAnswers.value = response.data;
+  } catch (error) {
+    console.error('Error fetching questions and answers:', error);
   }
-}
+};
 
+
+
+// Send actions to the server
+const sendActions = () => {
+  const requests = [];
+
+  actionText.value.forEach((actionText, index) => {
+    const questionId = filteredQuestionsAndAnswers.value[index].question_id;
+    const workerName = selectedWorker.value;
+    const executeDateFormatted = executeDate.value[index].toISOString();
+
+    const request = axios.post('/api/actions', {
+      question_id: questionId,
+      action_text: actionText,
+      worker_name: workerName,
+      execute_date: executeDateFormatted,
+    });
+
+    request.then(response => {
+      console.log('Aktion erfolgreich gesendet:', response.data);
+    }).catch(error => {
+      console.error('Fehler beim Senden der Aktion:', error.response.data);
+    });
+
+    requests.push(request);
+  });
+
+  Promise.all(requests)
+    .then(() => {
+      Swal.fire({
+        title: "Gesendet",
+        confirmButtonColor: "#007684",
+        text: "Danke für Teilnehmen",
+        icon: "success",
+      });
+    })
+    .catch(error => {
+      console.error('Fehler beim Speichern der Aktionen:', error);
+      Swal.fire({
+        icon: "error",
+        confirmButtonColor: "#007684",
+        title: "Fehler beim Speichern der Aktionen.",
+        text: "Bitte versuchen Sie es später erneut.",
+      });
+    });
+};
+
+
+// Fetch data when the component is mounted
+onMounted(() => {
+  fetchWorkers();
+  fetchUserName();
+  fetchQuestionsAndAnswers();
+});
+
+
+console.log('Selected Worker:', selectedWorker.value);
+console.log('Active Name:', activeName.value);
+console.log('Questions and Answers:', questionsAndAnswers.value);
+console.log('Filtered:', filteredQuestionsAndAnswers.value);
+
+
+watch([selectedWorker, activeName], () => {
+  console.log('Selected Worker changed:', selectedWorker.value);
+  console.log('Active Name changed:', activeName.value);
+  console.log('Filtered Questions and Answers:', filteredQuestionsAndAnswers.value);
+});
 </script>
 
 <style scoped>

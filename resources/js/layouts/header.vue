@@ -32,23 +32,69 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
-const router = useRouter()
-const currentRoute = router.currentRoute.value
-const isHome = currentRoute.path === '/'
+// Initialize router
+const router = useRouter();
 
+// Determine if the current route is the home route
+const currentRoute = router.currentRoute.value;
+const isHome = ref(currentRoute.path === '/');
+
+// Navigate to info page
 const goToInfo = () => {
-  router.push('/info')
-}
+  router.push('/info');
+};
 
+// Handle Azure login and reload page
 const azureLogin = () => {
-  router.push('login/azure')
-}
+  router.push('login/azure').then(() => {
+    window.location.reload();
+  });
+};
 
+// Navigate to home page
 const goHome = () => {
-  router.push('/')
-}
+  router.push('/');
+};
+
+// Show the login modal
+const showLoginModal = () => {
+  Swal.fire({
+    icon: 'info',
+    title: 'Login ist erforderlich',
+    text: 'Bitte drücken Sie den Knopf',
+    showCancelButton: false,
+    confirmButtonText: 'Sign in',
+    confirmButtonColor: '#007684',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      azureLogin();
+    }
+  });
+};
+
+// Check if the login modal has been shown before
+const checkAndShowLoginModal = () => {
+  const hasShownLoginModal = localStorage.getItem('hasShownLoginModal');
+  const lastShownTime = localStorage.getItem('loginModalTimestamp');
+  
+  const currentTime = new Date().getTime();
+  const twoHour = 7200000;
+
+  if (!hasShownLoginModal || !lastShownTime || (currentTime - parseInt(lastShownTime)) > twoHour) {
+    showLoginModal();
+    localStorage.setItem('hasShownLoginModal', 'true');
+    localStorage.setItem('loginModalTimestamp', currentTime.toString());
+  }
+};
+
+// Show login modal once when component is mounted
+onMounted(() => {
+  checkAndShowLoginModal();
+});
 </script>
 
 <script>

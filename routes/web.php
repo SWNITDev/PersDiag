@@ -44,7 +44,7 @@ Route::get('/admin', function () {
 });
 
 Route::get('/user/manager', [App\Http\Controllers\MicrosoftGraphController::class, 'showManager']);
-Route::get('/user/{userId}/directReports', [App\Http\Controllers\MicrosoftGraphController::class, 'showReportees']);
+Route::get('/user/reporters', [App\Http\Controllers\MicrosoftGraphController::class, 'showReportees']);
 //Route::get('/user/info', [App\Http\Controllers\MicrosoftGraphController::class, 'showManager']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -48,43 +48,60 @@
 <script>
 import HeaderLayout from '@/layouts/headerBig.vue';
 import axios from 'axios';
+import { ref, onMounted, computed } from 'vue';
 
 export default {
   components: {
     HeaderLayout
   },
-  data() {
-    return {
-      years: [],
-      selectedYear: '',
-      questionsAndAnswers: []
-    };
-  },
-  mounted() {
-    this.fetchQuestionsAndAnswers();
-  },
-  computed: {
-    filteredQuestionsAndAnswers() {
-      if (!this.selectedYear) {
-        return [];
-      } else {
-        return this.questionsAndAnswers.filter(item => {
-          return item.year === parseInt(this.selectedYear);
-        });
+  setup() {
+    const years = ref([]);
+    const selectedYear = ref('');
+    const questionsAndAnswers = ref([]);
+    const activeName = ref('');
+
+    const fetchUserName = async () => {
+      try {
+        const response = await axios.get('/user/manager');
+        activeName.value = response.data.userName;
+      } catch (error) {
+        console.error('Error fetching activeName:', error);
       }
-    }
-  },
-  methods: {
-    async fetchQuestionsAndAnswers() {
+    };
+
+    const fetchQuestionsAndAnswers = async () => {
       try {
         const response = await axios.get('/api/questions_and_answers');
-        this.questionsAndAnswers = response.data;
+        questionsAndAnswers.value = response.data;
         // JahrWert bekommen
-        this.years = [...new Set(this.questionsAndAnswers.map(item => item.year))];
+        years.value = [...new Set(questionsAndAnswers.value.map(item => item.year))];
       } catch (error) {
         console.error('Error fetching questions and answers:', error);
       }
-    }
+    };
+
+    const filteredQuestionsAndAnswers = computed(() => {
+      if (!selectedYear.value) {
+        return [];
+      } else {
+        return questionsAndAnswers.value.filter(item => {
+          return item.year === parseInt(selectedYear.value) && item.worker_name === activeName.value;
+        });
+      }
+    });
+
+    onMounted(() => {
+      fetchQuestionsAndAnswers();
+      fetchUserName();
+    });
+
+    return {
+      years,
+      selectedYear,
+      questionsAndAnswers,
+      activeName,
+      filteredQuestionsAndAnswers
+    };
   }
 };
 </script>

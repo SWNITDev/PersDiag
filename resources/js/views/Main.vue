@@ -112,9 +112,18 @@ const questions = ref([]);
 const selectedOptionGroups = ref([]);
 const groupedQuestions = ref([]);
 
+const fetchUserName = async () => {
+  try {
+    const response = await axios.get('/user/manager');
+    activeName.value = response.data.userName;
+  } catch (error) {
+    console.error('Error fetching activeName:', error);
+  }
+}
 // Функция для отправки запроса на сервер с выбранными ответами
 function sendAnswersToServer() {
   console.log("Вызвана функция sendAnswers");
+
   // Создание массива промисов для запросов
   const requests = [];
 
@@ -127,13 +136,13 @@ function sendAnswersToServer() {
       // Получение идентификатора вопроса и значения ответа
       const questionId = question.id;
 
-      console.log(`Данные перед отправкой на сервер: questionId=${questionId}, answerValue=${selectedValue}, aktiv_name=${activeName.value.aktiveName}`);
+      console.log(`Данные перед отправкой на сервер: questionId=${questionId}, answerValue=${selectedValue}, aktiv_name=${activeName.value}`);
       
       // Добавление запроса в массив запросов
       const request = axios.post('/api/questions/answer_value', { 
         question_id: questionId, 
         answer_value: selectedValue,
-        aktiv_name: activeName.value.aktiveName
+        aktiv_name: activeName.value,
       });
       requests.push(request);
       console.log("Добавлен запрос:", request);
@@ -234,7 +243,7 @@ const fetchQuestions = () => {
 
 onMounted(() => {
   fetchQuestions();
-
+  fetchUserName();
   //axios.get('/login/azure')
   //  .then(response => {
   //    console.log('Received active name:', response.data.aktiveName);

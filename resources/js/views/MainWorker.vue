@@ -109,11 +109,21 @@ import { useRoute, useRouter } from 'vue-router';
 const router = useRouter();
 const route = useRoute();
 
-
+const activeName = ref('');
 const selectedWorker = ref('');
+const workers = ref([]);
 const questions = ref([]);
 const selectedOptionGroups = ref([]);
 const groupedQuestions = ref([]);
+
+const fetchUserName = async () => {
+  try {
+    const response = await axios.get('/user/manager');
+    activeName.value = response.data.userName;
+  } catch (error) {
+    console.error('Error fetching activeName:', error);
+  }
+}
 
 // Функция для отправки запроса на сервер с выбранными ответами
 function sendAnswersToServer() {
@@ -130,10 +140,10 @@ function sendAnswersToServer() {
       // Получение идентификатора вопроса и значения ответа
       const questionId = question.id;
 
-      console.log(`Данные перед отправкой на сервер: questionId=${questionId}, answerValue=${selectedValue}`);
+      console.log(`Данные перед отправкой на сервер: questionId=${questionId}, answerValue=${selectedValue}, selectedWorker=${selectedWorker.value}`);
       
       // Добавление запроса в массив запросов
-      const request = axios.post('/api/questions/answer_value', { question_id: questionId, answer_value: selectedValue, worker_name: selectedWorker });
+      const request = axios.post('/api/questions/answer_value', { question_id: questionId, answer_value: selectedValue, worker_name: selectedWorker.value, aktiv_name: activeName.value, });
       requests.push(request);
       console.log("Добавлен запрос:", request);
     }
@@ -240,8 +250,21 @@ const fetchQuestions = () => {
     });
 };
 
+const fetchWorkers = () => {
+  axios.get('/user/reporters')
+    .then(response => {
+      workers.value = response.data; // Предполагается, что сервер возвращает массив работников
+      console.log('Fetched workers:', workers.value);
+    })
+    .catch(error => {
+      console.error('Error fetching workers:', error.response.data);
+    });
+};
+
 onMounted(() => {
   fetchQuestions();
+  fetchWorkers();
+  fetchUserName();
 });
 </script>
 
