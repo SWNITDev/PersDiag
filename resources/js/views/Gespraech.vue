@@ -69,7 +69,7 @@
             </div>
             <div class="d-grid gap-2 p-5 d-md-flex justify-content-md-center">
               <button class="btn btn-swn btn-lg" type="button" @click="sendActions">Speichern</button>
-              <button class="btn btn-swn btn-lg" type="button" @click="filteredQuestionsAndAnswers">filter</button>
+              
             </div>
           </div>
         </div>
@@ -128,34 +128,40 @@ const filteredQuestionsAndAnswers = computed(() => {
 
   const currentYear = new Date().getFullYear();
 
-  return questionsAndAnswers.value
-    .filter(item => {
-      const itemYear = new Date(item.date).getFullYear();
-      console.log(`Item date: ${item.date}, Year: ${itemYear}, Is current year: ${itemYear === currentYear}`);
-      return itemYear === currentYear;
-    })
-    .map(item => {
-      const answer_value_worker = (item.worker_name === selectedWorker.value && item.activ_name === selectedWorker.value) 
-        ? item.answer_value 
-        : '';
+  if (!questionsAndAnswers.value || questionsAndAnswers.value.length === 0) {
+    console.log("No questions and answers available");
+    return [];
+  }
 
-      const answer_value_manager = (item.worker_name === selectedWorker.value && item.activ_name === activeName.value) 
-        ? item.answer_value 
-        : '';
+  // Создадим объект для хранения каждого вопроса по его ID
+  const groupedItems = {};
 
-      console.log(`Item: ${item.question_id}, Worker: ${item.worker_name}, Activ: ${item.activ_name}`);
-      console.log('Assigned values:', {
-        answer_value_worker: answer_value_worker,
-        answer_value_manager: answer_value_manager,
-      });
+  questionsAndAnswers.value.forEach(item => {
+    const itemYear = parseInt(item.year, 10);
+    if (itemYear !== currentYear) {
+      return;
+    }
 
-      return {
+    // Если вопрос уже есть в объекте, обновляем значения
+    if (groupedItems[item.question_id]) {
+      if (item.worker_name === selectedWorker.value && item.activ_name === selectedWorker.value) {
+        groupedItems[item.question_id].answer_value_worker = item.answer_value;
+      } else if (item.worker_name === selectedWorker.value && item.activ_name === activeName.value) {
+        groupedItems[item.question_id].answer_value_manager = item.answer_value;
+      }
+    } else {
+      // Иначе создаем новый элемент с вопросом и его ответами
+      groupedItems[item.question_id] = {
         ...item,
-        answer_value_worker,
-        answer_value_manager,
+        answer_value_worker: item.worker_name === selectedWorker.value && item.activ_name === selectedWorker.value ? item.answer_value : '',
+        answer_value_manager: item.worker_name === selectedWorker.value && item.activ_name === activeName.value ? item.answer_value : '',
       };
-    });
+    }
+  });
+
+  return Object.values(groupedItems);
 });
+
 
 
 
@@ -175,27 +181,57 @@ const fetchQuestionsAndAnswers = async () => {
 const sendActions = () => {
   const requests = [];
 
-  actionText.value.forEach((actionText, index) => {
-    const questionId = filteredQuestionsAndAnswers.value[index].question_id;
-    const workerName = selectedWorker.value;
-    const executeDateFormatted = executeDate.value[index].toISOString();
+  // Проверяем наличие данных в filteredQuestionsAndAnswers
+  if (filteredQuestionsAndAnswers.value.length === 0) {
+    console.warn('Нет данных для отправки.');
+    return;
+  }
 
-    const request = axios.post('/api/actions', {
-      question_id: questionId,
-      action_text: actionText,
-      worker_name: workerName,
-      execute_date: executeDateFormatted,
-    });
+  // Проходимся по каждому элементу в filteredQuestionsAndAnswers
+  filteredQuestionsAndAnswers.value.forEach((item, index) => {
+    console.log("Processing item:", item); // Вывод текущего элемента
 
-    request.then(response => {
-      console.log('Aktion erfolgreich gesendet:', response.data);
-    }).catch(error => {
-      console.error('Fehler beim Senden der Aktion:', error.response.data);
-    });
+    const actionTextValue = actionText.value[index];
+    const executeDateValue = executeDate.value[index] ? executeDate.value[index].toISOString() : null;
 
-    requests.push(request);
+    // Если текст действия и дата заполнены, отправляем запрос
+    if (actionTextValue && executeDateValue) {
+      const questionId = item.question_id;
+
+      // Логируем данные перед отправкой
+      console.log("Prepared Action Data:", {
+        question_id: questionId,
+        action_text: actionTextValue,
+        worker_name: selectedWorker.value,
+        execute_date: executeDateValue,
+      });
+
+      // Формируем запрос для отправки данных
+      const request = axios.post('/api/actions', {
+        question_id: questionId,
+        action_text: actionTextValue,
+        worker_name: selectedWorker.value,
+        execute_date: executeDateValue,
+      });
+
+      // Обрабатываем результат запроса
+      request.then(response => {
+        console.log('Акция успешно отправлена:', response.data);
+      }).catch(error => {
+        console.error('Ошибка при отправке данных:', error.response ? error.response.data : error.message);
+      });
+
+      // Добавляем запрос в массив
+      requests.push(request);
+    } else {
+      console.warn('Пропущен элемент, так как actionText или executeDate отсутствуют:', {
+        actionTextValue,
+        executeDateValue,
+      });
+    }
   });
 
+  
   Promise.all(requests)
     .then(() => {
       Swal.fire({

@@ -81,21 +81,26 @@ class QuestionRepository
 
     }
     public function getAnswersAndActions()
-    {
-        return DB::table('questions')
-            ->leftJoin('answers', 'questions.id', '=', 'answers.question_id')
-            ->leftJoin('actions', 'questions.id', '=', 'actions.question_id')
-            ->select(
-                'questions.id as question_id',
-                'questions.question_text',
-                'answers.answer_value',
-                'answers.worker_name',
-                DB::raw("IFNULL(actions.action_text, '') as action_text"),
-                DB::raw("IFNULL(actions.execute_date, '') as execute_date"),
-                DB::raw('YEAR(answers.date) as year')
-            )
-            ->orderBy('questions.id', 'asc')
-            ->get();
-    }
+{
+    return DB::table('questions')
+        ->leftJoin('answers', 'questions.id', '=', 'answers.question_id')
+        ->leftJoin('actions', function ($join) {
+            $join->on('questions.id', '=', 'actions.question_id')
+                 ->on('answers.worker_name', '=', 'actions.worker_name');
+        })
+        ->select(
+            'questions.id as question_id',
+            'questions.question_text',
+            'answers.answer_value',
+            'answers.worker_name',
+            DB::raw("GROUP_CONCAT(DISTINCT actions.action_text ORDER BY actions.execute_date SEPARATOR ', ') as action_text"),
+            DB::raw("GROUP_CONCAT(DISTINCT actions.execute_date ORDER BY actions.execute_date SEPARATOR ', ') as execute_date"),
+            DB::raw('YEAR(answers.date) as year')
+        )
+        ->groupBy('questions.id', 'answers.worker_name', 'answers.answer_value', 'answers.date')
+        ->orderBy('questions.id', 'asc')
+        ->get();
+}
+
 
 }

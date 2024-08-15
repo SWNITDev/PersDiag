@@ -83,8 +83,10 @@ const goHome = () => {
 }
 
 const azureLogin = () => {
-  router.push('login/azure')
-}
+  router.push('login/azure').then(() => {
+    window.location.reload();
+  });
+};
 
 const goToGespraech = () => {
   router.push('/gespraech')

@@ -85,7 +85,7 @@ class QuestionController extends Controller
         $executeDate = date('Y-m-d H:i:s', strtotime($request->input('execute_date')));
         $questionId = $request->input('question_id');
         $actionText = $request->input('action_text');
-        $workerName = $request->input('worker_name');; // Standardwert für den Namen des Mitarbeiters setzen
+        $workerName = $request->input('worker_name');; 
        
         // Antwort mit Hilfe des Repositories speichern
         $savedAction = $this->questionRepository->saveActionStore($questionId, $actionText, $workerName, $executeDate);

@@ -85,7 +85,7 @@ export default {
         return [];
       } else {
         return questionsAndAnswers.value.filter(item => {
-          return item.year === parseInt(selectedYear.value) && item.worker_name === activeName.value;
+          return item.year === parseInt(selectedYear.value) && item.worker_name === activeName.value && item.worker_name === item.activ_name;
         });
       }
     });
