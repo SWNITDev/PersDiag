@@ -252,25 +252,33 @@ const sendActions = () => {
     });
 };
 
+// Method to manually trigger recomputation if needed
+const recomputeFilter = () => {
+  // Manually change a reactive property or just access the computed property
+  console.log('Recomputed Filter:', filteredQuestionsAndAnswers.value);
+};
 
-// Fetch data when the component is mounted
-onMounted(() => {
-  fetchWorkers();
-  fetchUserName();
-  fetchQuestionsAndAnswers();
+
+// Fetch data and ensure data dependencies are ready
+onMounted(async () => {
+  await fetchWorkers();
+  await fetchUserName();
+  await fetchQuestionsAndAnswers();
+  // Optionally, you can call recomputeFilter here to force a recomputation if needed
+  recomputeFilter();
 });
-
 
 console.log('Selected Worker:', selectedWorker.value);
 console.log('Active Name:', activeName.value);
 console.log('Questions and Answers:', questionsAndAnswers.value);
 console.log('Filtered:', filteredQuestionsAndAnswers.value);
 
-
-watch([selectedWorker, activeName], () => {
+watch([selectedWorker, activeName, questionsAndAnswers], () => {
   console.log('Selected Worker changed:', selectedWorker.value);
   console.log('Active Name changed:', activeName.value);
   console.log('Filtered Questions and Answers:', filteredQuestionsAndAnswers.value);
+  console.log('Recomputing due to changes...');
+  recomputeFilter();
 });
 </script>
 
